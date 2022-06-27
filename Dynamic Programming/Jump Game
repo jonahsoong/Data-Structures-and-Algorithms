@@ -1,0 +1,21 @@
+class Solution {
+    public boolean canJump(int[] nums) {
+        boolean[] canEnd = new boolean[nums.length];
+        canEnd[nums.length-1] = true;
+        for(int i = nums.length - 1; i >= 0; i--){
+            checkEnd(canEnd, nums, i);
+        }
+        System.out.println(Arrays.toString(canEnd));
+        return canEnd[0];
+    }
+    public void checkEnd(boolean[] canEnd, int[] nums, int i){
+        for(int j = i; j <= i + nums[i]; j++){
+                //System.out.println("" + j + canEnd[j]);
+                if(canEnd[j]){
+                    canEnd[i] = true;
+                    return;
+                }
+            }
+    }
+   
+}
