@@ -1,0 +1,26 @@
+class Solution {
+    public Node cloneGraph(Node node) {
+        if(node == null)
+            return null;
+        Hashtable<Integer, Node> newNodes = new Hashtable();
+        HashSet<Integer> visitVals = new HashSet();
+        LinkedList<Node> q = new LinkedList();
+        q.add(node);
+        int fVal = node.val;
+        visitVals.add(fVal);
+        newNodes.put(fVal, new Node(fVal, new ArrayList<Node>()));
+        while(!q.isEmpty()){
+            Node curr = q.remove();
+            for(Node n : curr.neighbors){
+                if(!visitVals.contains(n.val)){
+                    visitVals.add(n.val);
+                    newNodes.put(n.val, new Node(n.val, new ArrayList<Node>()));
+                    q.add(n);
+                }
+                newNodes.get(curr.val).neighbors.add(newNodes.get(n.val));
+            }
+        }
+        return newNodes.get(fVal);
+        
+    }
+}
