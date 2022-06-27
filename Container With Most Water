@@ -1,0 +1,21 @@
+class Solution {
+    public int maxArea(int[] height) {
+        int maxArea = 0;
+        int leftPtr = 0;
+        int rightPtr = height.length-1;
+        
+        while(leftPtr < rightPtr){
+            int rHeight = height[rightPtr];
+            int lHeight = height[leftPtr];
+            //System.out.println(lHeight + " " + rHeight + " " + (rightPtr-leftPtr));
+            //System.out.println(Math.min(lHeight, rHeight));
+            maxArea = Math.max(maxArea, Math.min(lHeight, rHeight) * (rightPtr-leftPtr));
+            if(rHeight > lHeight)
+                leftPtr++;
+            else
+                rightPtr--;
+        }
+        
+        return maxArea;
+    }
+}
