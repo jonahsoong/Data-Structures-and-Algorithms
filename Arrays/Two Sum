@@ -1,0 +1,19 @@
+import java.util.Hashtable;
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        Hashtable<Integer, Integer> visit = new Hashtable();
+        int[] ret = new int[2];
+        for(int i = 0; i < nums.length; i++){
+            int n = nums[i];
+            if(visit.containsKey(n)){
+                ret[0] = i;
+                ret[1] = visit.get(n);
+                return ret;
+            }
+            else{
+                visit.put(target-n, i);
+            }
+        }
+        return ret;
+    }
+}
