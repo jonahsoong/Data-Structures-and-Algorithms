@@ -1,0 +1,65 @@
+class Solution {
+
+    public int search(int[] nums, int target) {
+
+        int offset = findMinIndex(nums, 0, nums.length-1);
+
+        return binSearch(nums, target, 0, nums.length-1, offset);
+
+    }
+
+   
+
+    public int findMinIndex(int[] nums, int left, int right){
+
+        if(left == right || left == right - 1 || left == right + 1){
+
+            if(nums[left] > nums[right])
+
+                return right;
+
+            return left;
+
+        }
+
+        int index = (left+right)/2;
+
+        if(nums[index] < nums[index-1] && nums[index] < nums[index+1])
+
+            return index;
+
+        if(nums[index] < nums[right])
+
+            return findMinIndex(nums, left, index-1);
+
+        return findMinIndex(nums, index+1, right);
+
+    }
+
+   
+
+    public int binSearch(int[] nums, int target, int left, int right, int offset){
+
+        if(left > right)
+
+            return -1;
+
+        int nextIndex = (left+right)/2;
+
+        int index = ((left+right)/2+offset)%nums.length;
+
+        //System.out.println(index);
+
+        if(nums[index] == target)
+
+            return index;
+
+        if(nums[index] < target)
+
+            return binSearch(nums, target, nextIndex+1, right, offset);
+
+        return binSearch(nums, target, left, nextIndex-1, offset);
+
+    }
+
+}
