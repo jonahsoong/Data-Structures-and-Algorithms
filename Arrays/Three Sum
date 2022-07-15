@@ -1,0 +1,117 @@
+class Solution {
+
+    public List<List<Integer>> threeSum(int[] nums) {
+
+        HashSet<Integer> uniqueNum = new HashSet();
+
+        HashSet<String> uniqueSols = new HashSet();
+
+        for(int n : nums){
+
+            if(n >=0)
+
+                uniqueNum.add(n);
+
+        }
+
+        List<List<Integer>> sol = new ArrayList();
+
+        for(int n : uniqueNum){
+
+            twoSum(nums, n, sol, uniqueSols);
+
+        }
+
+        // for(String s:uniqueSols)
+
+        //     System.out.println(s);
+
+        return sol;
+
+        /**
+
+        1. generate unique nums
+
+        2. run two sum on all, accounting for number already existing
+
+        */
+
+    }
+
+   
+
+    public void twoSum(int[] nums, int target, List<List<Integer>> sol, HashSet<String> uniqueSols){
+
+        boolean seenB4 = false;
+
+        HashSet<Integer> remainder = new HashSet();
+
+        for(int n : nums){
+
+            if(n == target){
+
+                if(!seenB4){
+
+                    seenB4 = true;
+
+                    continue;
+
+                }
+
+            }
+
+            if(remainder.contains(n)){
+
+                List<Integer> newSol = new ArrayList();
+
+                newSol.add(target);
+
+                newSol.add(n);
+
+                newSol.add(-1*target-n);
+
+                if(!uniqueSols.contains(""+newSol.get(0)+newSol.get(1)+newSol.get(2))){
+
+                    //System.out.println(target + " " + n);
+
+                    //Collections.sort(newSol);
+
+                    sol.add(newSol);
+
+                    genUniqueStrings(newSol, uniqueSols);
+
+                }
+
+            }
+
+           // -1 = x + y
+
+            else{
+
+                remainder.add(-1*target-n);
+
+            }
+
+        }
+
+    }
+
+    public void genUniqueStrings(List<Integer> sol, HashSet<String> uniqueSols){
+
+        //System.out.println(sol.toString());
+
+        uniqueSols.add("" + sol.get(0) + sol.get(1) + sol.get(2));
+
+        uniqueSols.add("" + sol.get(0) + sol.get(2) + sol.get(1));
+
+        uniqueSols.add("" + sol.get(1) + sol.get(0) + sol.get(2));
+
+        uniqueSols.add("" + sol.get(1) + sol.get(2) + sol.get(0));
+
+        uniqueSols.add("" + sol.get(2) + sol.get(1) + sol.get(0));
+
+        uniqueSols.add("" + sol.get(2) + sol.get(0) + sol.get(1));
+
+    }
+
+}
