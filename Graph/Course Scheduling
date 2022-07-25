@@ -1,0 +1,40 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        ArrayList<Integer>[] preReqs = new ArrayList[numCourses];
+        //int[] numReqs = new int[numCourses];
+        for(int i = 0;  i < preReqs.length; i++){
+            preReqs[i] = new ArrayList();
+        }
+        for(int i= 0;  i < prerequisites.length; i++){
+            preReqs[prerequisites[i][1]].add(prerequisites[i][0]);
+            //numReqs[prerequisites[i][0]]++;
+        }
+        HashSet<Integer> visited = new HashSet();     
+        for(int i = 0; i < preReqs.length; i++){
+                if(!visited.contains(i)){
+                    HashSet<Integer> dfsStack = new HashSet();
+                    dfsStack.add(i);
+                    visited.add(i);
+                    if(cycle(preReqs, dfsStack, visited, i))
+                        return false;
+                }       
+        }
+        return true;
+    }
+    public boolean cycle(ArrayList<Integer>[] graph, HashSet<Integer> stack, HashSet<Integer> visited, int course){
+        //System.out.println(course);
+        for(int num : graph[course]){
+            if(stack.contains(num))
+                return true;
+            else if(!visited.contains(num)){
+                visited.add(num);
+                stack.add(num);
+                if(cycle(graph, stack, visited, num))
+                    return true;
+            }
+            stack.remove(num);
+        }
+        return false;
+    }
+    
+}
