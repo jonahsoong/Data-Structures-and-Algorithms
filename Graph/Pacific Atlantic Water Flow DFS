@@ -1,0 +1,51 @@
+class Solution {
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        List<List<Integer>> spots = new ArrayList();
+        for(int i = 0; i < heights.length; i++){
+            for(int j = 0; j < heights[0].length; j++){
+                boolean[] reach = new boolean[2];
+               // System.out.println("" + i + j);
+                dfs(heights, i, j, heights[i][j], reach);
+                if(reach[0] && reach[1]){
+                    List<Integer> coord = new ArrayList();
+                    coord.add(i);
+                    coord.add(j);
+                    spots.add(coord);
+                }
+            }
+        }
+        return spots;
+    }
+    public void dfs(int[][] heights, int r, int c, int prevHeight, boolean[] reach){
+       // System.out.println("dfs"+r+c);
+        if(r < 0 || c < 0){
+            reach[0] = true;
+            return;
+        }
+        if(r >= heights.length || c >= heights[0].length){
+            reach[1] = true;
+            return;
+        }
+        if(heights[r][c] > prevHeight)
+            return;
+        int oldHeight = heights[r][c];
+        heights[r][c] = Integer.MAX_VALUE;
+        dfs(heights, r-1, c, oldHeight, reach);
+        if(reach[0] && reach[1]){
+            heights[r][c] = oldHeight;
+            return;
+        }
+        dfs(heights, r+1, c, oldHeight, reach);
+        if(reach[0] && reach[1]){
+            heights[r][c] = oldHeight;
+            return;
+        }
+        dfs(heights, r, c-1, oldHeight, reach);
+        if(reach[0] && reach[1]){
+            heights[r][c] = oldHeight;
+            return;
+        }
+        dfs(heights, r, c+1, oldHeight, reach);
+        heights[r][c] = oldHeight;
+    }
+}
