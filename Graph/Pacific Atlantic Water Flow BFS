@@ -1,0 +1,106 @@
+class Solution {
+    public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        int[][] reachPacific = new int[heights.length][heights[0].length];
+        int[][] reachAtlantic = new int[heights.length][heights[0].length];
+        List<List<Integer>> canReach = new ArrayList();
+        for(int i = 0; i < heights.length; i++){
+            for(int j = 0; j <  heights[0].length; j++){
+                if(reachPacific[i][j] == 2 && reachAtlantic[i][j] == 2){
+                    List<Integer> coord = new ArrayList();
+                    coord.add(i);
+                    coord.add(j);
+                    canReach.add(coord);
+                    continue;
+                }
+                else if(reachPacific[i][j] != 0 && reachAtlantic[i][j] != 0)
+                    continue;
+                Queue<Pair<Integer,Integer>> q = new LinkedList();
+                q.add(new Pair(i, j));
+                boolean reachAtlanticOc = false;
+                boolean reachPacificOc = false;
+                HashSet<Pair<Integer,Integer>> stack = new HashSet();
+                while(!q.isEmpty()){
+                   // System.out.println("In Q");
+                    Pair<Integer, Integer> p = q.poll();
+                    stack.add(p);
+                    int r = p.getKey();
+                    int c = p.getValue();
+                    // if(r < 0 || c < 0 || r >= heights.length || c >= heights[0].length)
+                    //     continue;
+                    if(r == 0 || c == 0 || reachPacific[r][c] == 2){
+                        reachPacificOc = true;
+                        reachPacific[i][j] = 2;
+                       // continue;
+                    }
+                    if(r == heights.length - 1 || c == heights[0].length - 1 || reachAtlantic[r][c] == 2){
+                        reachAtlanticOc = true;
+                        reachAtlantic[i][j] = 2;
+                        //continue;
+                    }
+                    if(reachAtlanticOc && reachPacificOc){
+                        //updateCoords(stack, reachPacificOc, reachAtlanticOc, reachPacific, reachAtlantic);
+                        List<Integer> toAdd = new ArrayList();
+                        toAdd.add(i);
+                        toAdd.add(j);
+                        canReach.add(toAdd);
+                        break;
+                    }
+                    if(r + 1 < heights.length && heights[r+1][c] <= heights[r][c] && !stack.contains(new Pair(r+1,c)))
+                        q.add(new Pair(r+1, c));
+                    if(r-1 >= 0 && heights[r-1][c] <= heights[r][c]&& !stack.contains(new Pair(r-1,c)))
+                        q.add(new Pair(r-1, c));
+                    if(c + 1 < heights[0].length && heights[r][c+1] <= heights[r][c]&& !stack.contains(new Pair(r,c+1)))
+                        q.add(new Pair(r, c+1));
+                    if(c-1 >= 0 && heights[r][c-1] <= heights[r][c]&& !stack.contains(new Pair(r,c-1)))
+                        q.add(new Pair(r, c-1));
+                }
+                //System.out.println("outOfQ");
+               // updateCoords(stack, reachPacificOc, reachAtlanticOc, reachPacific, reachAtlantic);
+                if(!reachPacificOc)
+                    reachPacific[i][j] = 1;
+                if(!reachAtlanticOc)
+                    reachAtlantic[i][j] = 1;
+                    
+            }
+        }
+      //  print2DArray(reachPacific);
+       // System.out.println();
+        //print2DArray(reachAtlantic);
+        return canReach;
+        
+    }
+    
+    public void updateCoords(HashSet<Pair<Integer, Integer>> stack, boolean reachPacificOc, boolean reachAtlanticOc, int[][] reachPacific, int[][] reachAtlantic){
+        for(Pair<Integer, Integer> p : stack){
+            if(reachPacificOc)
+                reachPacific[p.getKey()][p.getValue()] = 2;
+            else
+                reachPacific[p.getKey()][p.getValue()] = 1;
+            if(reachAtlanticOc)
+                reachAtlantic[p.getKey()][p.getValue()] = 2;
+            else
+                reachAtlantic[p.getKey()][p.getValue()] = 1;
+                
+        }
+    }
+    public void print2DArray(int[][] arr){
+        for(int i = 0; i < arr.length; i++){
+            for(int j = 0; j < arr[0].length; j++){
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+    
+//     public int bfs(int[][] heights, int r, int c, int[][] reachBoth, List<List<Integer>> canReach){
+//         if(r < 0 || c < 0)
+            
+//         if)
+//             return true;
+//         if(reachBoth[r][c] == 1)
+//             return -1;
+//         if(reachBoth[r][c] == 2)
+//             return 1;
+        
+//     }
+}
