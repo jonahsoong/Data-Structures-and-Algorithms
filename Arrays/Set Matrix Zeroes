@@ -1,0 +1,44 @@
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int rowInfo = -1;
+        int colInfo = -1;
+        int rowCount = 0;
+        int colCount = 0;
+        for(int i = 0; i < matrix.length; i++){
+            for(int j = 0; j < matrix[0].length; j++){
+                if(rowInfo == -1){
+                    if(matrix[i][j] == 0){
+                        rowInfo = i;
+                        colInfo = j;
+                    }
+                }
+                else{
+                    if(matrix[i][j] == 0){
+                    matrix[i][colInfo] = 0;
+                    matrix[rowInfo][j] = 0;
+                    }
+                }
+            }
+        }
+        if(rowInfo == -1)
+            return;
+       // System.out.println(Arrays.deepToString(matrix));
+        for(int i = 0; i < matrix.length; i++){
+            if(i == rowInfo)
+                continue;
+            for(int j = 0; j < matrix[0].length; j++){
+                if(j == colInfo)
+                    continue;
+                //System.out.println(matrix[i][j] + " " + i + " " + j);
+                if(matrix[i][colInfo] == 0 || matrix[rowInfo][j] == 0)
+                    matrix[i][j] = 0;
+            }
+        }
+        for(int i = 0; i < Math.max(matrix.length, matrix[0].length); i++){
+            if(i < matrix.length)
+                matrix[i][colInfo] = 0;
+            if(i < matrix[0].length)
+                matrix[rowInfo][i] = 0;
+        }
+    }
+}
