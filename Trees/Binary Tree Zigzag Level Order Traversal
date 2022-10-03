@@ -1,0 +1,57 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        Queue<TreeNode> q = new LinkedList();
+        q.add(root);
+        q.add(null);
+        boolean leftRight = true;
+        List<List<Integer>> res =  new ArrayList();
+        List<Integer> leftRightRow = new ArrayList();
+        List<Integer> rightLeftRow = new LinkedList();
+        while(!q.isEmpty()){
+            TreeNode tn = q.poll();
+            if(tn == null){
+                if(leftRightRow.size() == 0 && rightLeftRow.size() == 0)
+                    break;
+              //  System.out.println(rightLeftRow);
+                q.add(null);
+                if(leftRight){
+                    res.add(leftRightRow);
+                    leftRightRow = new ArrayList();
+                }
+                else{
+                    res.add(rightLeftRow);
+                    rightLeftRow = new LinkedList();
+                }
+                leftRight = !leftRight;
+                continue;
+            }
+           // System.out.println(tn.val);
+            if(tn.left != null)
+                q.add(tn.left);
+            if(tn.right != null)
+                q.add(tn.right);
+            if(leftRight){
+                leftRightRow.add(tn.val);
+            }
+            else{
+                rightLeftRow.add(0, tn.val);
+            }
+        }
+        return res;
+    }
+}
