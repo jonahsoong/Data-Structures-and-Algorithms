@@ -1,0 +1,40 @@
+class Solution {
+    public List<String> letterCombinations(String digits) {
+        if(digits.length() == 0)
+            return new ArrayList<String>();
+        List<String> sol = new ArrayList();
+        letterCombs(digits, new StringBuilder(), sol);
+        return sol;
+    }
+    
+    public void letterCombs(String digits, StringBuilder curr, List<String> sol){
+        if(digits.length() == curr.length()){
+            sol.add(curr.toString());
+            return;
+        }
+        for(char c : convertDig(digits.charAt((curr.length()))-'0').toCharArray()){
+            curr.append(c);
+            letterCombs(digits, curr, sol);
+            curr.deleteCharAt(curr.length()-1);
+        }
+    }
+    
+    public String convertDig(int i){
+        if(i == 2)
+            return "abc";
+        else if(i == 3)
+            return "def";
+        else if(i==4)
+            return "ghi";
+        else if(i==5)
+            return "jkl";
+        else if(i==6)
+            return "mno";
+        else if(i==7)
+            return "pqrs";
+        else if(i==8)
+            return "tuv";
+        else
+            return "wxyz";
+    }
+}
