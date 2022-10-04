@@ -1,0 +1,40 @@
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        //return null;
+       return build(preorder, inorder, 0, preorder.length-1, 0, inorder.length-1);    
+    }
+    public TreeNode build(int[] preorder, int[] inorder, int preLeft, int preRight, int inLeft, int inRight){
+        if(preorder.length == 0 || preLeft > preRight)
+            return null;
+        TreeNode root = new TreeNode(preorder[preLeft]);
+        System.out.println("curr " + preorder[preLeft]);
+        //find pivot
+        int cutIn = indexOf(inorder, preorder[preLeft],-1, inLeft, inRight);
+        //left tree is left to index-1
+        int cutPre = cutIn - inLeft + preLeft;
+        root.left = build(preorder, inorder, preLeft+1, cutPre, inLeft, cutIn-1);
+        root.right = build(preorder, inorder, cutPre+1, preRight, cutIn+1, inRight);
+        return root;
+    }
+    //find pivot code, originally looking for two pivots but not needed
+    public int indexOf(int[] order, int search, int search1, int left, int right){
+        boolean fSearch = false;
+        boolean fSearch1 = false;
+        if(search1 == -1)
+            fSearch1 = true;
+        for(int i = left; i <= right; i++){
+            //System.out.println(order[i] + "hi" + search);
+            if(order[i] == search)
+                if(fSearch1)
+                    return i;
+                else
+                    fSearch = true;
+            if(order[i] == search1)
+                if(fSearch)
+                    return i;
+                else
+                    fSearch1 = true;
+        }
+        return -1;
+    }
+}
