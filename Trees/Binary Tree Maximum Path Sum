@@ -1,0 +1,66 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int maxPathSum(TreeNode root) {
+        //not possible to travel upward in tree
+        //start from bottom, store max sum involving that nodes children
+        //reverse level order traversal
+        //set for val -> node, val -> max sum, array for l.o.t
+        if(root == null)
+            return 0;
+        List<TreeNode> arr = levelOrder(root);
+        Map<TreeNode, Integer> sums = new HashMap();
+        int maxSum = Integer.MIN_VALUE;
+        for(int i = arr.size()-1; i >= 0; i--){
+            maxSum = Math.max(maxSum, maxVal(arr.get(i), sums));
+          //  System.out.println(maxSum + " " + arr.get(i).val);
+        }
+        for(int i = 0; i < arr.size(); i++){
+            //System.out.println(sums.get(arr.get(i).val));
+        }
+        return maxSum;
+    }
+    public int maxVal(TreeNode n, Map<TreeNode, Integer> sums){
+        int val = n.val;
+        if(n.left != null)
+            val = Math.max(val, val + sums.get(n.left));
+        if(n.right != null)
+            val = Math.max(val, val + sums.get(n.right));
+        if(n.left != null && n.right != null)
+            sums.put(n, Math.max(n.val,n.val + Math.max(sums.get(n.left), sums.get(n.right))));
+        else
+            sums.put(n, val);
+        if(n.val == -191 || n.val == 563 || n.val == 664)
+            System.out.println(n.val + " " + val + " " + sums.get(n)); 
+        return val;
+    }
+    public List<TreeNode> levelOrder(TreeNode root){
+        List<TreeNode> arr = new ArrayList();
+        Queue<TreeNode> q = new LinkedList();
+        q.add(root);
+        while(!q.isEmpty()){
+            TreeNode tmp = q.poll();
+            //System.out.println(tmp.val);
+            if(tmp.left != null)
+                q.add(tmp.left);
+            if(tmp.right != null)
+                q.add(tmp.right);
+            //map.put(tmp.val, tmp);
+            arr.add(tmp);
+        }
+        return arr;
+    }
+}
