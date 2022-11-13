@@ -1,0 +1,53 @@
+class Solution {
+    public void wallsAndGates(int[][] rooms) {
+        Queue<Pair<Integer, Integer>> q = new LinkedList();
+        HashSet<Pair<Integer, Integer>> visited = new HashSet();
+        for(int i = 0; i < rooms.length; i++){
+            for(int j = 0; j < rooms[0].length; j++){
+                if(rooms[i][j] == 0)
+                    q.add(new Pair(i, j));
+            }
+        }
+        q.add(new Pair(null,null));
+        int dist = 1;
+        boolean twoNull = false;
+        while(!q.isEmpty()){
+            Pair<Integer, Integer> p = q.poll();
+            System.out.println(p);
+            if(visited.contains(p))
+                continue;
+            if(p.getKey() == null){
+                if(twoNull)
+                    break;
+                dist++;
+                twoNull = true;
+                q.add(new Pair(null,null));
+                continue;
+            }
+            else{
+                twoNull = false;
+            }
+            int r = p.getKey();
+            int c = p.getValue();
+            isValidAndEmpty(r+1, c, rooms, dist, q);
+            isValidAndEmpty(r-1, c, rooms, dist, q);
+            isValidAndEmpty(r, c+1, rooms, dist, q);
+            isValidAndEmpty(r, c-1, rooms, dist, q);
+            visited.add(p);
+        }
+        //bfs from a gate and go out or bfs from empty squares
+    }
+    public boolean isValidAndEmpty(int r, int c, int[][] rooms, int dist, Queue<Pair<Integer, Integer>> q){
+        if(r < 0 || r >= rooms.length)
+            return false;
+        if(c < 0 || c >= rooms[0].length)
+            return false;
+        if(rooms[r][c] == -1 || rooms[r][c] != Integer.MAX_VALUE)
+            return false;
+        rooms[r][c] = dist;
+        q.add(new Pair(r,c));
+        return true;
+    }
+
+
+}
