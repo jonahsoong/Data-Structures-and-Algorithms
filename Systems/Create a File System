@@ -1,0 +1,64 @@
+class FileSystem {
+    private Map<String, Integer> vals;
+
+    public FileSystem() {
+        vals = new HashMap();
+    }
+    //is /l/ valid?
+    public boolean createPath(String path, int value) {
+        //string does not exist or is ""
+        if(path == null || path.length() == 0)
+            return false;
+        String[] paths = path.split("/");
+        //String is "/"
+        if(paths.length == 0)
+            return false;
+        StringBuffer parentPath = new StringBuffer("");
+        //find parent path(everything except last /)
+        for(int i = 1; i < paths.length-1; i++){
+            parentPath.append('/');
+            for(char c : paths[i].toCharArray()){
+                //verify only valid characters
+                if(!Character.isAlphabetic(c) || !Character.isLowerCase(c)){
+                    return false;
+                }
+                parentPath.append(c);
+            }
+        }
+        //check parent exists
+        if(parentPath.length() != 0 && !vals.containsKey(parentPath.toString())){
+            //System.out.println(parentPath);
+            return false;
+        }
+        //create actual path
+        parentPath.append('/');
+        for(char c : paths[paths.length-1].toCharArray()){
+            if(!Character.isAlphabetic(c) || !Character.isLowerCase(c)){
+                    return false;
+            }
+            parentPath.append(c);
+        }
+        //check if path already exists
+        //System.out.println(parentPath + " " + value + vals.containsKey("/leet/code"));
+        if(vals.containsKey(parentPath.toString()))
+            return false;
+        else{
+            vals.put(parentPath.toString(), value);
+            return true;
+        }
+        //System.out.println(Arrays.toString("/l".split("/")) + "/l".split("/").length);
+    }
+    
+    public int get(String path) {
+        if(vals.containsKey(path))
+            return vals.get(path);
+        return -1;
+    }
+}
+
+/**
+ * Your FileSystem object will be instantiated and called as such:
+ * FileSystem obj = new FileSystem();
+ * boolean param_1 = obj.createPath(path,value);
+ * int param_2 = obj.get(path);
+ */
