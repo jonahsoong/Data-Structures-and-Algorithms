@@ -1,0 +1,79 @@
+ public class Element implements Comparable<Element>{
+    public int r;
+    public int c;
+    public int elevation;
+    public Element(int r, int c, int elevation) {
+      this.r = r;
+      this.c = c;
+      this.elevation = elevation;
+    }
+    @Override
+    public int compareTo(Element e10){
+      return elevation - e10.elevation;
+    }
+    @Override
+    public boolean equals(Object e10){
+        Element e = (Element)e10;
+      return e.r == r && e.c == c && e.elevation == elevation;
+    }
+    @Override
+    public String toString(){
+        return r + " " + c + " " + elevation;
+    }
+    @Override
+    public int hashCode(){
+        int hash = 7;
+        hash = 89 * hash + r;
+        hash = 89 * hash + c;
+        hash = 89 * hash + elevation;
+        return hash;
+    }
+  }
+class Solution {
+  public static int swimInWater(int[][] grid){
+   // System.out.println(new Element(0,0,grid[0][0]).equals(new Element(0,0,grid[0][0])));
+    PriorityQueue<Element> pq = new PriorityQueue();
+    HashSet<Element> visited = new HashSet();
+    pq.add(new Element(0,0, grid[0][0]));
+    int time = 0;
+    while(!pq.isEmpty()){
+      Element e = pq.peek();
+     // System.out.println(time + " " + e.r + " " + e.c + " " + e.elevation);
+     // System.out.println(visited);
+      if(e.elevation > time){
+        time++;
+        continue;
+      }
+      else{
+        if(e.r == grid.length-1 && e.c == grid[0].length-1)
+          return time;
+        else{
+          visited.add(pq.poll());
+          addValid(pq, visited, grid, e.r-1, e.c);
+          addValid(pq, visited, grid, e.r+1, e.c);
+          addValid(pq, visited, grid, e.r, e.c-1);
+          addValid(pq, visited, grid, e.r, e.c+1);
+          //System.out.println(pq.size());
+                //System.out.println(pq);
+          //System.out.println(pq.poll());     
+          // System.out.println(pq);
+
+        //System.out.println(pq.size());
+        }
+      }
+    }
+    return -1;
+  }
+  public static void addValid(PriorityQueue<Element> pq, HashSet<Element> visited, int[][] grid, int r, int c){
+    if(r < 0 || r >= grid.length)
+      return;
+    if(c < 0 || c >= grid[0].length)
+      return;
+     // System.out.println(visited);
+      //System.out.println(visited.contains(new Element(0,0,0)));
+    if(visited.contains(new Element(r,c,grid[r][c])))
+      return;
+    //System.out.println("hi" + r + " " + c);
+    pq.add(new Element(r,c,grid[r][c]));
+  }
+}
