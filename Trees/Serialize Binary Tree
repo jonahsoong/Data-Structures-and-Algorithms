@@ -1,0 +1,65 @@
+**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        //serialize through level order traversal
+        StringBuffer lot = new StringBuffer("");
+        Queue<TreeNode> q = new LinkedList();
+        q.add(root);
+        int size = 0;
+        while(!q.isEmpty()){
+            TreeNode tmp = q.poll();
+            if(tmp == null){
+                lot.append("n ");
+                continue;
+            }
+            q.add(tmp.left);
+            q.add(tmp.right);
+            lot.append(tmp.val + " ");
+            size++;
+        }
+        return lot.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        //System.out.println(data);
+        String[] nodes = data.split(" ");
+        if(data.equals("") || data.equals("n "))
+            return null;
+        TreeNode root = new TreeNode(Integer.parseInt(nodes[0]));
+        Queue<TreeNode> q = new LinkedList();
+        q.add(root);
+        boolean even = true;
+        int i = 1;
+        while(!q.isEmpty() && i < nodes.length){
+            TreeNode tmp = q.poll();
+            if(nodes[i].equals("n"))
+                tmp.left = null;
+            else{
+                tmp.left = new TreeNode(Integer.parseInt(nodes[i]));
+                q.add(tmp.left);
+            }
+            i++;
+            if(i >= nodes.length)
+                break;
+            if(nodes[i].equals("n"))
+                tmp.right = null;
+            else{
+                tmp.right = new TreeNode(Integer.parseInt(nodes[i]));
+                q.add(tmp.right);
+            }
+            i++;
+        }
+        return root;
+    }
+}
